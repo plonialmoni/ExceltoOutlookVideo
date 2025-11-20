@@ -1,80 +1,47 @@
-Sub AddAppointmentsToOutlookCalendar()
-Dim olApp As Object ' Outlook.Application
-Dim olNamespace As Object ' Outlook.Namespace
-Dim olFolder As Object ' Outlook.Folder
-Dim olApt As Object ' Outlook.AppointmentItem
-    
-' Create Outlook application object
-Set olApp = CreateObject("Outlook.Application")
+# Excel to Outlook Appointment Creator
 
-' Get Outlook default namespace
-Set olNamespace = olApp.GetNamespace("MAPI")
+This project provides a VBA script to automate the creation of Outlook appointments based on data stored in an Excel spreadsheet.
 
-' Get default calendar folder
-Set olFolder = olNamespace.GetDefaultFolder(9) ' olFolderCalendar
-    
-' Excel variables
-Dim wb As Workbook
-Dim ws As Worksheet
-Dim rng As Range
-Dim lastRow As Long
+## Overview
 
-' Set the workbook and worksheet
-Set wb = ThisWorkbook ' or specify the workbook name/path
-Set ws = wb.Worksheets("Sheet1") ' Modify as per your sheet name
-    
-' Find the last non-empty row in column A (Appointment_Name)
-lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
-    
-' Check if there are appointments data
-If lastRow < 2 Then
-    MsgBox "No appointments found in the dataset.", vbInformation
-    Exit Sub
- End If
-    
- ' Set the range based on the longest row that isn't null
- Set rng = ws.Range("A2:H" & lastRow)
-    
- ' Loop through each appointment in the range
- For Each cell In rng.Rows
-    ' Create a new appointment item
-    Set olApt = olFolder.Items.Add(1) ' olAppointmentItem
-        
-    ' Set appointment properties from Excel cells
-    With olApt
-        .Subject = cell.Range("A1").Value ' Set subject
-            
-        ' Set start date/time
-        Dim startDate As Date
-        Dim startTime As Date
-        startDate = cell.Range("B1").Value
-        startTime = cell.Range("C1").Value
-        .Start = startDate + startTime
-            
-        ' Set end date/time
-        Dim endDate As Date
-        Dim endTime As Date
-        endDate = cell.Range("D1").Value
-        endTime = cell.Range("E1").Value
-        .End = endDate + endTime
-            
-        .Location = cell.Range("F1").Value ' Set location
-        .Body = cell.Range("G1").Value ' Set body/description
-        .ReminderSet = True ' Set reminder (True/False)
-        .ReminderMinutesBeforeStart = 15 ' Set reminder time (if ReminderSet is True)
-    End With
-        
- ' Save the appointment
- olApt.Save
-        
- ' Release object references
- Set olApt = Nothing
- Next cell
-    
- ' Release Outlook objects
- Set olFolder = Nothing
- Set olNamespace = Nothing
- Set olApp = Nothing
-    
- MsgBox "Appointments added to Outlook calendar successfully!", vbInformation
- End Sub
+The `AddAppointmentsToOutlookCalendar` macro reads appointment details from "Sheet1" of the Excel workbook and creates corresponding events in your default Outlook calendar.
+
+## Files
+
+- **execol.vba**: The VBA source code for the macro.
+- **Appointments VBA - Public.xlsm**: A macro-enabled Excel workbook template ready for use.
+- **Appointments VBA - Public - With Color Category.xlsm**: A variant of the template (likely including color categorization features).
+
+## Prerequisites
+
+- Microsoft Excel
+- Microsoft Outlook (must be installed and configured)
+
+## Data Format
+
+The script expects data in **Sheet1** starting from row 2 (row 1 is for headers). The columns should be arranged as follows:
+
+| Column | Field | Description |
+|--------|-------|-------------|
+| **A** | Subject | The title of the appointment |
+| **B** | Start Date | Date the appointment starts (e.g., 2023-10-27) |
+| **C** | Start Time | Time the appointment starts (e.g., 14:00) |
+| **D** | End Date | Date the appointment ends |
+| **E** | End Time | Time the appointment ends |
+| **F** | Location | Location of the meeting/event |
+| **G** | Body | Description or notes for the appointment |
+
+## Usage
+
+1. **Open the Workbook**: Open `Appointments VBA - Public.xlsm`.
+2. **Enter Data**: Fill in the appointment details in "Sheet1" following the format above.
+3. **Run the Macro**:
+   - Go to the **Developer** tab (or press `Alt + F11` to open the VBA editor).
+   - If using the VBA editor, ensure the code from `execol.vba` is present in a module.
+   - Run the subroutine `AddAppointmentsToOutlookCalendar`.
+4. **Confirmation**: A message box will appear indicating how many appointments were successfully added.
+
+## Notes
+
+- The script uses late binding (`CreateObject("Outlook.Application")`), so no manual reference to the Outlook object library is required in the VBA editor.
+- Ensure Outlook is running or configured to open.
