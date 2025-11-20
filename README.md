@@ -10,7 +10,7 @@ The `AddAppointmentsToOutlookCalendar` macro reads appointment details from "She
 
 - **execol.vba**: The VBA source code for the macro.
 - **Appointments VBA - Public.xlsm**: A macro-enabled Excel workbook template ready for use.
-- **Appointments VBA - Public - With Color Category.xlsm**: A variant of the template (likely including color categorization features).
+- **Appointments VBA - Public - With Color Category.xlsm**: A variant of the template (including color categorization features).
 
 ## Prerequisites
 
