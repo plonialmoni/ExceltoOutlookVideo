@@ -74,7 +74,7 @@ Sub AddAppointmentsToOutlookCalendar()
                 .Location = cell.Range("F1").Value
                 .Body = cell.Range("G1").Value
                 .ReminderSet = True
-                .ReminderMinutesBeforeStart = 15
+                .ReminderMinutesBeforeStart = 43200 ' 30 days in minutes
                 
                 .Save
             End With
